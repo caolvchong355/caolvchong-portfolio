@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>草履虫 · 作品集</title>
+<style>
+  /* ============ 基础变量：想改配色改这里 ============ */
+  :root {
+    --blue: #1f4fd8;
+    --blue-dark: #143a9e;
+    --yellow: #ffd93d;
+    --yellow-soft: #fff3b0;
+    --ink: #1a1a1a;
+    --paper: #fdfaf3;
+    --line: #1a1a1a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    background-color: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    /* 针织纹理：用细密斜线模拟织物感 */
+    background-image:
+      repeating-linear-gradient(45deg, rgba(31,79,216,0.04) 0 2px, transparent 2px 6px),
+      repeating-linear-gradient(-45deg, rgba(255,217,61,0.10) 0 2px, transparent 2px 6px);
+  }
+
+  /* ============ 顶部导航 ============ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .logo {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: var(--blue);
+  }
+  nav a {
+    margin-left: 18px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s;
+  }
+  nav a:hover { border-color: var(--yellow); }
+
+  /* ============ 首屏 ============ */
+  .hero {
+    padding: 90px 24px 70px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    line-height: 1.15;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+  .hero h1 .hl {
+    /* 手绘感高亮：黄色色块 */
+    background: linear-gradient(transparent 55%, var(--yellow) 55%);
+    padding: 0 4px;
+  }
+  .hero p {
+    margin-top: 18px;
+    font-size: 1.1rem;
+    max-width: 640px;
+    color: #333;
+  }
+  .hero .badge {
+    display: inline-block;
+    margin-top: 26px;
+    background: var(--blue);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  /* 手绘拼贴装饰块 */
+  .collage-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--yellow);
+    opacity: .8;
+  }
+  .collage-dot.d1 { width: 60px; height: 60px; top: 60px; right: 40px; }
+  .collage-dot.d2 { width: 34px; height: 34px; top: 150px; right: 120px; background: var(--blue); opacity: .7; }
+
+  /* ============ 作品区 ============ */
+  section { padding: 60px 24px; max-width: 1000px; margin: 0 auto; }
+
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 36px;
+    display: inline-block;
+    border-bottom: 6px solid var(--yellow);
+    padding-bottom: 6px;
+  }
+
+  .project {
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    padding: 26px;
+    margin-bottom: 40px;
+    /* 手绘拼贴：轻微旋转 + 阴影，像贴上去的纸片 */
+    box-shadow: 6px 6px 0 var(--blue);
+    transform: rotate(-0.4deg);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .project:nth-child(even) {
+    transform: rotate(0.5deg);
+    box-shadow: 6px 6px 0 var(--yellow);
+  }
+  .project:hover {
+    transform: rotate(0) translateY(-4px);
+    box-shadow: 10px 10px 0 var(--blue-dark);
+  }
+
+  .project h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--blue-dark);
+  }
+  .project .role {
+    display: inline-block;
+    font-size: .8rem;
+    background: var(--yellow-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 12px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .project p.desc { margin-bottom: 18px; color: #333; }
+
+  /* ============ 图片网格 + 灯箱 ============ */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    cursor: zoom-in;
+    background: #eee;
+    transition: transform .2s;
+  }
+  .gallery img:hover { transform: scale(1.03); }
+
+  /* 灯箱 */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,.88);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 30px;
+    cursor: zoom-out;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 92%;
+    max-height: 88%;
+    border-radius: 10px;
+    border: 4px solid var(--yellow);
+  }
+
+  /* ============ 页脚 ============ */
+  footer {
+    border-top: 2px solid var(--line);
+    padding: 30px 24px;
+    text-align: center;
+    background: var(--blue);
+    color: #fff;
+  }
+  footer a { color: var(--yellow); text-decoration: none; font-weight: 700; }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 600px) {
+    .hero { padding: 60px 20px 50px; }
+    .collage-dot { display: none; }
+    .project { padding: 20px; box-shadow: 4px 4px 0 var(--blue); }
+    .project:nth-child(even) { box-shadow: 4px 4px 0 var(--yellow); }
+    nav a { margin-left: 12px; font-size: .9rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">草履虫 · CAOLVCHONG</div>
+  <nav>
+    <a href="#works">作品</a>
+    <a href="#contact">联系</a>
+  </nav>
+</header>
+
+<!-- 首屏 -->
+<div class="hero">
+  <div class="collage-dot d1"></div>
+  <div class="collage-dot d2"></div>
+  <h1>你好，我是 <span class="hl">草履虫</span></h1>
+  <p>数字媒体艺术 · 智能产品交互工作室。<br>
+     关注视觉设计与交互体验，喜欢手绘拼贴的温度和针织纹理的秩序感。</p>
+  <span class="badge">作品集 · Portfolio</span>
+</div>
+
+<!-- 作品区 -->
+<section id="works">
+  <h2 class="section-title">作品 Works</h2>
+
+  <!-- 作品 1 -->
+  <div class="project">
+    <h3>B612猫咖项目</h3>
+    <span class="role">团体项目</span>
+    <p class="desc">一家关于德文猫的咖啡店视觉设计，从品牌标识到空间氛围的整体呈现。</p>
+    <div class="gallery">
+      <img src="noise.png" alt="B612猫咖项目" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+
+  <!-- 作品 2 -->
+  <div class="project">
+    <h3>绿叶能源充电桩 APP</h3>
+    <span class="role">个人项目</span>
+    <p class="desc">简洁方便操作、可预约式应用 UI 设计，让充电这件事变得轻松可预期。</p>
+    <div class="gallery">
+      <img src="type1.png" alt="绿叶能源充电桩 APP - 界面一" onclick="openLightbox(this.src)">
+      <img src="type2.png" alt="绿叶能源充电桩 APP - 界面二" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section id="contact">
+  <h2 class="section-title">联系 Contact</h2>
+  <p>邮箱：<a href="mailto:2769188981@qq.com">2769188981@qq.com</a></p>
+  <p>欢迎交流合作，也欢迎来看我后续的 p5.js 和 Three.js 作品。</p>
+</section>
+
+<footer>
+  © 2026 草履虫 · 数字媒体艺术 智能产品交互工作室
+</footer>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="放大预览">
+</div>
+
+<script>
+  // 打开灯箱
+  function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lightbox-img').src = src;
+    lb.classList.add('active');
+  }
+  // 关闭灯箱
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+  // 按 Esc 关闭
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
